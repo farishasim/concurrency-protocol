@@ -1,4 +1,5 @@
 from item import Item
+from transaction import Transaction
 
 class LockManager():
 
@@ -7,7 +8,7 @@ class LockManager():
         self.table = dict.fromkeys(items.keys(), 0)
         return
 
-    def lock(self, txn, item):
+    def lock(self, txn:Transaction, item):
         if self.table[item] :
             return False
         self.table[item] = txn
@@ -16,4 +17,9 @@ class LockManager():
     def unlock(self, item):
         self.table[item] = False
         return
+
+    def unlockall(self, txn):
+        for item, tx in self.table.items():
+            if tx == txn:
+                self.unlock(item)
 

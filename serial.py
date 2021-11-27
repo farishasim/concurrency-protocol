@@ -3,10 +3,7 @@ from operation import *
 
 class SerialProcessor(Processor):
     # Serial without concurrency
-
-    def __init__(self):
-        super().__init__()
-
+    
     def choose_txn(self):
         for i, txn in self.txns.items():
             if txn.isdone():
@@ -15,6 +12,5 @@ class SerialProcessor(Processor):
         return False
 
 if __name__=="__main__":
-    proc = SerialProcessor()
-    proc.load("contoh.txt")
+    proc = SerialProcessor("contoh.txt")
     proc.run()
