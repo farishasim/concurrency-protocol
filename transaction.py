@@ -15,15 +15,15 @@ class Transaction():
         return 
 
     def parse(self, schedule:str):
-        schedule = schedule.split(':')
-        self.name = schedule[0]
-        ops = schedule[1].split(';')
+        sch = schedule.rstrip('\n').rstrip(';').split(':')
+        self.name = sch[0]
+        ops = sch[1].split(';')
         for op in ops:
             try:
-                op = op.rstrip('\n').split('_')
+                op = op.split('_')
                 self.add(Operation(op[0], op[1]))
             except IndexError:
-                self.add(Operation(op[0], ''))
+                self.add(Operation(op[0], ' '))
 
     def add(self, op):
         self.ops.append(op)
@@ -36,6 +36,8 @@ class Transaction():
         except IndexError:
             return False
 
+    def isdone(self):
+        return self.ptr == len(self.ops)
 
     def exec(self):
         # return next operation, increment pointer

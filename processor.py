@@ -1,6 +1,7 @@
 from os import name
 from item import Item
 from lockmanager import LockManager
+from operation import OP_WRITE
 from transaction import Transaction
 
 
@@ -35,12 +36,34 @@ class Processor():
         print()
 
     def run(self):
-        self.log()
-        while self.exec():
+        while True:
             self.log()
+            txn = self.choose_txn()
+            if txn:
+                print("execute : ", end=f"{txn.name}-")
+                txn.next().log()
+                print("\n")
+                self.exec(txn)
+            else :
+                break
         return
+
+    def exec(self, txn):
+        op = txn.exec()
+        item = op.item
+        code = op.code
+        if code == OP_WRITE:
+            val = op.value
+            self.data[item].set(val)
+
+    def choose_txn(self):
+        # override this method to choose appropriate txn
+        # based on chosen algorithm
+        # return txn, or 
+        # return False (if all txn is done)
+        return False
 
 if __name__=="__main__":
     proc = Processor()
     proc.load("contoh.txt")
-    proc.log()
+    proc.run()
