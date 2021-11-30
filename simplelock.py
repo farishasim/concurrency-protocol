@@ -1,5 +1,6 @@
 from random import randint
 from typing import Dict, List
+import sys
 
 from lockmanager import LockManager
 from operation import OP_COMMIT, OP_READ, OP_WRITE
@@ -60,5 +61,5 @@ class SimpleLockProcessor(Processor):
         return self.choose_txn()
 
 if __name__=="__main__":
-    proc = SimpleLockProcessor("contoh.txt")
+    proc = SimpleLockProcessor(sys.argv[1])
     proc.run()
